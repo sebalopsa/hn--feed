@@ -6,6 +6,8 @@ export type StoryDocument = Story & Document;
 @Schema()
 export class Story {
   @Prop({ required: true, unique: true })
+  objectID: number;
+  @Prop({ unique: false })
   story_id: number;
   @Prop()
   created_at: Date;

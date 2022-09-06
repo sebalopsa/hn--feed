@@ -4,8 +4,7 @@ import { Model } from 'mongoose';
 import { CreateStoryDto } from './dto/create-story.dto';
 import { UpdateStoryDto } from './dto/update-story.dto';
 import { Story, StoryDocument } from './schemas/story.schema';
-
-@Injectable()
+//
 export class StoriesService {
   constructor(
     @InjectModel(Story.name) private storyModel: Model<StoryDocument>,
@@ -16,17 +15,19 @@ export class StoriesService {
     return createStory.save();
   }
 
-  createMany() {}
+  createMany(createStoriesDto: CreateStoryDto[]) {
+    return this.storyModel.insertMany(createStoriesDto);
+  }
 
   findAll() {
-    return `This action returns all stories`;
+    return this.storyModel.find({ deleted: false });
   }
 
   update(id: number, updateStoryDto: UpdateStoryDto) {
-    return `This action updates a #${id} story`;
+    return this.storyModel.updateOne({ objectID: id }, updateStoryDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} story`;
+    return this.storyModel.deleteOne({ objectID: id });
   }
 }

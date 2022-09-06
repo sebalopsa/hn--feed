@@ -17,8 +17,8 @@ export class StoriesController {
   constructor(private readonly storiesService: StoriesService) {}
 
   @Post()
-  create(@Body() createStoryDto: CreateStoryDto) {
-    return this.storiesService.create(createStoryDto);
+  createMany(@Body() createStoriesDto: CreateStoryDto[]) {
+    return this.storiesService.createMany(createStoriesDto);
   }
 
   @Get()
