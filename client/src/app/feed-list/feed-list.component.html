@@ -10,7 +10,10 @@
   <div class="date">
     {{ item.created_at | date: "shortTime" }}
   </div>
-  <div class="delete-btn" (click)="delete(); $event.stopPropagation()">
+  <div
+    class="delete-btn"
+    (click)="delete(item.objectID); $event.stopPropagation()"
+  >
     <div class="icon">Delete</div>
   </div>
 </a>

@@ -6,7 +6,7 @@ export type StoryDocument = Story & Document;
 @Schema()
 export class Story {
   @Prop({ required: true, unique: true })
-  objectID: number;
+  objectID: string;
   @Prop({ unique: false })
   story_id: number;
   @Prop()

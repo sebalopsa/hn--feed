@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
+import { ApiService } from '../api.service';
 
 @Component({
   selector: 'app-feed-list',
@@ -8,12 +8,20 @@ import { DataService } from '../data.service';
 })
 export class FeedListComponent {
   items: any[] = [];
-  constructor(public dataSrv: DataService) {
-    this.items = dataSrv.getFeed();
+  constructor(public api: ApiService) {
+    this.refreshFeed();
+  }
+
+  refreshFeed() {
+    this.api.getFeed().then((data) => (this.items = data as any[]));
   }
 
   goToUrl(url: string) {
     if (url) window.open(url, '_blank');
   }
-  delete() {}
+  delete(id: string) {
+    if (confirm(`Deleting story ${id}. Are you sure?`)) {
+      this.api.deleteStory(id).then(() => this.refreshFeed());
+    }
+  }
 }
