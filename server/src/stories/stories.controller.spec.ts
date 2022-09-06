@@ -3,7 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Story } from './schemas/story.schema';
 import { StoriesController } from './stories.controller';
 import { StoriesService } from './stories.service';
-
+import { HttpService } from '@nestjs/axios';
+import { of } from 'rxjs';
 export class StoryModelFake {
   public create(): void {}
   public async save(): Promise<void> {}
@@ -20,6 +21,12 @@ describe('StoriesController', () => {
       providers: [
         StoriesService,
         { provide: getModelToken(Story.name), useValue: StoryModelFake },
+        {
+          provide: HttpService,
+          useValue: {
+            get: jest.fn(() => of({})),
+          },
+        },
       ],
     }).compile();
 

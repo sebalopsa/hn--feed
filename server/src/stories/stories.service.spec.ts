@@ -1,9 +1,10 @@
-import { getConnectionToken, getModelToken } from '@nestjs/mongoose';
+import { HttpService } from '@nestjs/axios';
+import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Model } from 'mongoose';
-import { Story, StoryDocument } from './schemas/story.schema';
+import { ModuleMocker } from 'jest-mock';
+import { of } from 'rxjs';
+import { Story } from './schemas/story.schema';
 import { StoriesService } from './stories.service';
-import { ModuleMocker, MockFunctionMetadata } from 'jest-mock';
 
 export class StoryModelFake {
   public create(): void {}
@@ -15,7 +16,6 @@ export class StoryModelFake {
 const moduleMocker = new ModuleMocker(global);
 describe('StoriesService', () => {
   let service: StoriesService;
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -23,6 +23,12 @@ describe('StoriesService', () => {
         {
           provide: getModelToken(Story.name),
           useValue: StoryModelFake,
+        },
+        {
+          provide: HttpService,
+          useValue: {
+            get: jest.fn(() => of({})),
+          },
         },
       ],
     }).compile();

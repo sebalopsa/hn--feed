@@ -1,13 +1,15 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { HttpService } from '@nestjs/axios';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import { getModelToken } from '@nestjs/mongoose';
+import { Test, TestingModule } from '@nestjs/testing';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { connect, Connection, Model } from 'mongoose';
-import { storiesStub } from './stories.stub';
-import { StoriesService } from '../src/stories/stories.service';
-import { getModelToken } from '@nestjs/mongoose';
+import { of } from 'rxjs';
+import * as request from 'supertest';
 import { Story, StorySchema } from '../src/stories/schemas/story.schema';
 import { StoriesController } from '../src/stories/stories.controller';
+import { StoriesService } from '../src/stories/stories.service';
+import { storiesStub } from './stories.stub';
 
 describe('StoriesController (e2e)', () => {
   let app: INestApplication;
@@ -34,6 +36,12 @@ describe('StoriesController (e2e)', () => {
       providers: [
         StoriesService,
         { provide: getModelToken(Story.name), useValue: storyModel },
+        {
+          provide: HttpService,
+          useValue: {
+            get: jest.fn(() => of({})),
+          },
+        },
       ],
     }).compile();
 

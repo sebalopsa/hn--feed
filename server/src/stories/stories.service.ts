@@ -25,12 +25,10 @@ export class StoriesService {
     let stored = await this.storyModel.find({
       objectId: { $in: [createStoriesDto.map((el) => el.objectID)] },
     });
-    console.log(stored.map((el) => el.objectID));
     let toStore = createStoriesDto.filter(
       (el) => !stored.map((el) => el.objectID).includes(el.objectID),
     );
 
-    console.log(toStore.map((el) => el.objectID));
     return this.storyModel.insertMany(toStore);
   }
 
