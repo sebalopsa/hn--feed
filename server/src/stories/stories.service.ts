@@ -5,9 +5,10 @@ import { CreateStoryDto } from './dto/create-story.dto';
 import { UpdateStoryDto } from './dto/update-story.dto';
 import { Story, StoryDocument } from './schemas/story.schema';
 import { HttpService } from '@nestjs/axios';
-import { map, take } from 'rxjs/operators';
-import { lastValueFrom } from 'rxjs';
+import { catchError, map, take } from 'rxjs/operators';
+import { lastValueFrom, of } from 'rxjs';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { off } from 'process';
 
 const API_URL = 'https://hn.algolia.com/api/v1/search_by_date?query=nodejs';
 @Injectable()
@@ -18,7 +19,11 @@ export class StoriesService {
     @InjectModel(Story.name) private storyModel: Model<StoryDocument>,
     private readonly httpService: HttpService,
   ) {
-    this.hydrateDatabase();
+    try {
+      this.hydrateDatabase();
+    } catch (error) {
+      this.logger.debug('Failed get feed from API');
+    }
   }
 
   async create(createStoryDto: CreateStoryDto) {
@@ -39,12 +44,17 @@ export class StoriesService {
 
   async hydrateDatabase() {
     this.logger.debug('Hydrating database');
-    let data = await lastValueFrom(
+    let data = [];
+    data = await lastValueFrom(
       this.httpService.get(API_URL).pipe(
         take(1),
-        map((response) => response.data.hits as CreateStoryDto[]),
+        map(
+          (response) =>
+            (response.data ? response.data.hits : []) as CreateStoryDto[],
+        ),
       ),
     );
+
     return this.createMany(data);
   }
 
@@ -67,7 +77,7 @@ export class StoriesService {
     return this.storyModel.deleteMany({});
   }
 
-  @Cron(CronExpression.EVERY_30_SECONDS)
+  @Cron(CronExpression.EVERY_HOUR)
   handleCron() {
     this.hydrateDatabase();
   }
