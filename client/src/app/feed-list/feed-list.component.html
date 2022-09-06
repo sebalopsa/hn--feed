@@ -8,7 +8,13 @@
   </div>
   <div class="author">- {{ item.author }} -</div>
   <div class="date">
-    {{ item.created_at | date: "shortTime" }}
+    {{
+      isToday(item.created_at)
+        ? (item.created_at | date: "shortTime")
+        : isYesterday(item.created_at)
+        ? "yesterday"
+        : (item.created_at | date: "MMM d")
+    }}
   </div>
   <div
     class="delete-btn"

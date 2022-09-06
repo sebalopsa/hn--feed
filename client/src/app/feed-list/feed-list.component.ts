@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -23,5 +23,30 @@ export class FeedListComponent {
     if (confirm(`Deleting story ${id}. Are you sure?`)) {
       this.api.deleteStory(id).then(() => this.refreshFeed());
     }
+  }
+
+  isToday(date: string | Date) {
+    date = new Date(date);
+    let today = new Date();
+    return (
+      date.getDate() == today.getDate() &&
+      date.getMonth() == today.getMonth() &&
+      date.getFullYear() == today.getFullYear()
+    );
+  }
+
+  isYesterday(date: string | Date) {
+    date = new Date(date);
+
+    let yesterdayDate = new Date().getDate() - 1;
+
+    let yesterday = new Date();
+    yesterday.setDate(yesterdayDate);
+
+    return (
+      date.getDate() == yesterday.getDate() &&
+      date.getMonth() == yesterday.getMonth() &&
+      date.getFullYear() == yesterday.getFullYear()
+    );
   }
 }
