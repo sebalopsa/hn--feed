@@ -1,7 +1,7 @@
 <a
   *ngFor="let item of items"
   class="feed-element"
-  (click)="goToUrl(item.story_url)"
+  (click)="goToUrl(item.story_url || item.url)"
 >
   <div class="title">
     {{ item.story_title || item.title }}
