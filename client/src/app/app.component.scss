@@ -1,0 +1,25 @@
+.wrapper {
+  height: 100vh;
+  width: 100vw;
+
+  .hero {
+    background-color: #333333;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 3rem 2rem;
+    .title,
+    .subtitle {
+      margin-top: 0px;
+      margin-bottom: 0px;
+      color: #fff;
+    }
+    .title {
+      font-size: 60px;
+    }
+  }
+
+  .content {
+    padding: 1rem 2rem;
+  }
+}

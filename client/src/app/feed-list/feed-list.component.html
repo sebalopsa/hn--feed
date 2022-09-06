@@ -1,0 +1,16 @@
+<a
+  *ngFor="let item of items"
+  class="feed-element"
+  (click)="goToUrl(item.story_url)"
+>
+  <div class="title">
+    {{ item.story_title || item.title }}
+  </div>
+  <div class="author">- {{ item.author }} -</div>
+  <div class="date">
+    {{ item.created_at | date: "shortTime" }}
+  </div>
+  <div class="delete-btn" (click)="delete(); $event.stopPropagation()">
+    <div class="icon">Delete</div>
+  </div>
+</a>

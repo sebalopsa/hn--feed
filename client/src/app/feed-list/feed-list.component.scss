@@ -1,0 +1,34 @@
+.feed-element {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 13pt;
+  text-decoration: none;
+  padding: 1.5rem 1rem;
+  .title {
+    color: #333;
+  }
+
+  .author {
+    margin-left: 8px;
+    color: #999;
+  }
+
+  .date {
+    margin-left: auto;
+    color: #333;
+  }
+  .delete-btn {
+    padding: 0px 1rem;
+    opacity: 0;
+  }
+}
+
+.feed-element:hover {
+  background-color: #fafafa;
+  .delete-btn {
+    opacity: 1;
+  }
+}
